@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitlane Supply</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Pitlane Supply</h1>
+    <p>Premium racing gear • Worldwide shipping</p>
+  </header>
+
+  <section class="hero">
+    <h2>Race-Ready Caps & Apparel</h2>
+    <p>Official-style team merchandise, delivered fast.</p>
+    <a href="#products" class="btn">Shop Now</a>
+  </section>
+
+  <section id="products">
+    <h2>Featured Items</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="img">Red Bull Cap</div>
+        <h3>Max Verstappen Cap 2026</h3>
+        <p class="price">$49</p>
+        <button class="btn" onclick="buy('price_redbull_cap')">Buy Now</button>
+      </div>
+      <div class="card">
+        <div class="img">Ferrari Cap</div>
+        <h3>Ferrari Team Cap</h3>
+        <p class="price">$45</p>
+        <button class="btn" onclick="buy('price_ferrari_cap')">Buy Now</button>
+      </div>
+      <div class="card">
+        <div class="img">Mercedes Tee</div>
+        <h3>Mercedes Driver Tee</h3>
+        <p class="price">$65</p>
+        <button class="btn" onclick="buy('price_merc_tee')">Buy Now</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="script.js"></script>
+</body>
+</html>
