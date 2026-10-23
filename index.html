@@ -7,41 +7,109 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Pitlane Supply</h1>
-    <p>Premium F1-style gear • Malaysia</p>
-  </header>
+  <div id="auth-section">
+    <h2>Login or Sign Up</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="signUp()">Sign Up</button>
+    <button onclick="login()">Login</button>
+    <p id="auth-message"></p>
+  </div>
 
-  <section class="hero">
-    <h2>Race-Ready Caps & Apparel</h2>
-    <p>High-quality team merchandise, ready to ship.</p>
-    <a href="#products" class="btn">Shop Now</a>
-  </section>
+  <div id="store-section" style="display:none;">
+    <header>
+      <h1>Pitlane Supply</h1>
+      <p>Welcome, <span id="user-email"></span> | <button onclick="logout()">Logout</button></p>
+    </header>
 
-  <section id="products">
-    <h2>Featured Items</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="placeholder">Red Bull Cap</div>
-        <h3>Max Verstappen Cap</h3>
-        <p class="price">RM 199</p>
-        <button class="btn">Buy Now</button>
+    <section class="hero">
+      <h2>Race-Ready Caps & Apparel</h2>
+      <p>High-quality team merchandise, ready to ship.</p>
+      <a href="#products" class="btn">Shop Now</a>
+    </section>
+
+    <section id="products">
+      <h2>Featured Items</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="placeholder">Red Bull Cap</div>
+          <h3>Max Verstappen Cap</h3>
+          <p class="price">RM 199</p>
+          <button class="btn" onclick="buy('Max Verstappen Cap', 'RM 199')">Buy Now</button>
+        </div>
+        <div class="card">
+          <div class="placeholder">Ferrari Cap</div>
+          <h3>Ferrari Team Cap</h3>
+          <p class="price">RM 189</p>
+          <button class="btn" onclick="buy('Ferrari Team Cap', 'RM 189')">Buy Now</button>
+        </div>
+        <div class="card">
+          <div class="placeholder">Mercedes Tee</div>
+          <h3>Mercedes Driver Tee</h3>
+          <p class="price">RM 259</p>
+          <button class="btn" onclick="buy('Mercedes Driver Tee', 'RM 259')">Buy Now</button>
+        </div>
       </div>
-      <div class="card">
-        <div class="placeholder">Ferrari Cap</div>
-        <h3>Ferrari Team Cap</h3>
-        <p class="price">RM 189</p>
-        <button class="btn">Buy Now</button>
-      </div>
-      <div class="card">
-        <div class="placeholder">Mercedes Tee</div>
-        <h3>Mercedes Driver Tee</h3>
-        <p class="price">RM 259</p>
-        <button class="btn">Buy Now</button>
-      </div>
+    </section>
+
+    <div id="order-confirmed" style="display:none; text-align:center; padding:2rem; background:#1c1f26;">
+      <h2>Order Confirmed!</h2>
+      <p>Check your WhatsApp. We will contact you soon.</p>
     </div>
-  </section>
+  </div>
 
-  <script src="script.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDV15usiM69dNKJtnQ6KemZNYzCShfOyMM",
+      authDomain: "nalysaor-store.firebaseapp.com",
+      projectId: "nalysaor-store",
+      storageBucket: "nalysaor-store.firebasestorage.app",
+      messagingSenderId: "619370199518",
+      appId: "1:619370199518:web:dc130f20df9d37515e454f",
+      measurementId: "G-DC2G73YY2Y"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signUp = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => { document.getElementById("auth-message").innerText = "Account created! Please login."; })
+        .catch(e => { document.getElementById("auth-message").innerText = e.message; });
+    };
+
+    window.login = function() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .catch(e => { document.getElementById("auth-message").innerText = e.message; });
+    };
+
+    window.logout = function() {
+      signOut(auth);
+    };
+
+    window.buy = function(product, price) {
+      const msg = `Hi I want to buy ${product} ${price}`;
+      window.open(`https://wa.me/639979401535?text=${encodeURIComponent(msg)}`, "_blank");
+      document.getElementById("order-confirmed").style.display = "block";
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("auth-section").style.display = "none";
+        document.getElementById("store-section").style.display = "block";
+        document.getElementById("user-email").innerText = user.email;
+      } else {
+        document.getElementById("auth-section").style.display = "block";
+        document.getElementById("store-section").style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
